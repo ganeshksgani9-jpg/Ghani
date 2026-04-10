@@ -84,6 +84,24 @@
     .service-icon { font-size:2rem; margin-bottom:1.5rem; }
     .service-name { font-family:'Playfair Display',serif; font-size:1.5rem; font-weight:700; margin-bottom:1rem; color:var(--ink); }
     .service-desc { font-size:1rem; line-height:1.8; color:#6a6050; font-weight:300; }
+    .shop-section { padding:8rem 3rem; background:#0d0a06; }
+    .shop-tabs { display:flex; gap:0.8rem; margin-bottom:3rem; flex-wrap:wrap; }
+    .shop-tab { font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; padding:0.6rem 1.5rem; border:1px solid #2a2418; background:transparent; color:var(--muted); cursor:none; transition:all 0.3s; }
+    .shop-tab.active, .shop-tab:hover { background:var(--gold); color:var(--ink); border-color:var(--gold); }
+    .shop-grid { display:grid; grid-template-columns:repeat(3,1fr); gap:2px; }
+    .shop-card { background:#111008; overflow:hidden; transition:transform 0.3s; cursor:none; }
+    .shop-card:hover { transform:translateY(-4px); }
+    .shop-card.hidden { display:none; }
+    .shop-img { height:220px; overflow:hidden; background:#1a1510; display:flex; align-items:center; justify-content:center; }
+    .shop-img img { width:100%; height:100%; object-fit:contain; padding:1rem; transition:transform 0.5s; }
+    .shop-card:hover .shop-img img { transform:scale(1.05); }
+    .shop-info { padding:1.5rem; }
+    .shop-cat { font-family:'Space Mono',monospace; font-size:0.6rem; letter-spacing:0.2em; color:var(--gold); text-transform:uppercase; }
+    .shop-name { font-family:'Playfair Display',serif; font-size:1.1rem; font-weight:700; color:var(--parchment); margin:0.5rem 0; }
+    .shop-desc { font-size:0.9rem; color:var(--muted); line-height:1.6; font-weight:300; margin-bottom:1.2rem; }
+    .shop-btn { display:inline-block; background:var(--gold); color:var(--ink); font-family:'Space Mono',monospace; font-size:0.65rem; letter-spacing:0.15em; text-transform:uppercase; text-decoration:none; padding:0.7rem 1.5rem; transition:background 0.3s; }
+    .shop-btn:hover { background:var(--parchment); }
+    .shop-disclaimer { font-family:'Space Mono',monospace; font-size:0.6rem; color:#3a3428; text-align:center; margin-top:3rem; letter-spacing:0.1em; }
     .contact-section { padding:8rem 3rem; text-align:center; position:relative; overflow:hidden; }
     .contact-bg { position:absolute; inset:0; background:radial-gradient(ellipse at center,#1a1208 0%,var(--ink) 70%); }
     .contact-section > * { position:relative; z-index:1; }
@@ -109,8 +127,10 @@
       .gallery-grid{grid-template-columns:1fr 1fr} .gallery-item:nth-child(n){grid-column:auto;grid-row:auto;aspect-ratio:1}
       .about-section{grid-template-columns:1fr} .about-image{height:40vh}
       .services-grid{grid-template-columns:1fr}
+      .shop-grid{grid-template-columns:1fr 1fr}
       footer{flex-direction:column;gap:1rem;text-align:center}
     }
+    @media(max-width:480px){ .shop-grid{grid-template-columns:1fr} }
   </style>
 </head>
 <body>
@@ -122,6 +142,7 @@
       <li><a href="#gallery">Gallery</a></li>
       <li><a href="#about">About</a></li>
       <li><a href="#services">Services</a></li>
+      <li><a href="#shop">Shop</a></li>
       <li><a href="#contact">Contact</a></li>
     </ul>
   </nav>
@@ -166,10 +187,7 @@
   </div>
   <section class="gallery-section" id="gallery">
     <div class="section-header">
-      <div>
-        <p class="section-label">Featured Works</p>
-        <h2 class="section-title">The <em>Collection</em></h2>
-      </div>
+      <div><p class="section-label">Featured Works</p><h2 class="section-title">The <em>Collection</em></h2></div>
       <a href="#" class="view-all">View All Works →</a>
     </div>
     <div class="gallery-grid">
@@ -195,27 +213,109 @@
     </div>
   </section>
   <section class="services-section" id="services">
-    <div class="section-header"><div><p class="section-label">What We Offer</p><h2 class="section-title">Art for Every <em>Space</em></h2></div></div>
+    <div class="section-header"><div><p class="section-label" style="color:var(--terracotta)">What We Offer</p><h2 class="section-title" style="color:var(--ink)">Art for Every <em style="color:var(--terracotta)">Space</em></h2></div></div>
     <div class="services-grid">
       <div class="service-card"><div class="service-icon">🎨</div><div class="service-name">Original Works</div><p class="service-desc">One-of-a-kind paintings, sculptures, and mixed media pieces handcrafted by our curated artists.</p></div>
       <div class="service-card"><div class="service-icon">🖼️</div><div class="service-name">Art Curation</div><p class="service-desc">We help homes, hotels, and offices find the perfect pieces that speak to their identity and soul.</p></div>
       <div class="service-card"><div class="service-icon">✉️</div><div class="service-name">Commissions</div><p class="service-desc">Work directly with our artists to create bespoke pieces made exclusively for you.</p></div>
     </div>
   </section>
+  <section class="shop-section" id="shop">
+    <div class="section-header">
+      <div><p class="section-label">Our Shop</p><h2 class="section-title">Handpicked <em>Products</em></h2></div>
+    </div>
+    <div class="shop-tabs">
+      <button class="shop-tab active" onclick="filterShop(event,'all')">All</button>
+      <button class="shop-tab" onclick="filterShop(event,'art')">🎨 Art</button>
+      <button class="shop-tab" onclick="filterShop(event,'fitness')">🏋️ Fitness</button>
+      <button class="shop-tab" onclick="filterShop(event,'beauty')">🧴 Beauty</button>
+      <button class="shop-tab" onclick="filterShop(event,'fashion')">👕 Fashion</button>
+    </div>
+    <div class="shop-grid">
+      <div class="shop-card" data-cat="fitness">
+        <div class="shop-img"><img src="https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B01LR5R18K&Format=_SL250_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=ghaniarts-20" alt="Dumbbell"/></div>
+        <div class="shop-info">
+          <span class="shop-cat">Fitness</span>
+          <div class="shop-name">Amazon Basics Neoprene Dumbbell</div>
+          <p class="shop-desc">Comfortable grip, color-coded weights. Perfect for home workouts.</p>
+          <a href="https://www.amazon.com/Amazon-Basics-Neoprene-Workout-Dumbbell/dp/B01LR5R18K?linkCode=ll2&tag=ghaniarts-20" target="_blank" class="shop-btn">Buy on Amazon →</a>
+        </div>
+      </div>
+      <div class="shop-card" data-cat="art">
+        <div class="shop-img"><img src="https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0DTB2N2D9&Format=_SL250_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=ghaniarts-20" alt="Crayola Airbrush"/></div>
+        <div class="shop-info">
+          <span class="shop-cat">Art</span>
+          <div class="shop-name">Crayola Marker Airbrush Spray</div>
+          <p class="shop-desc">Create stunning airbrush effects with regular markers. Perfect for all artists.</p>
+          <a href="https://www.amazon.com/Crayola-Marker-Airbrush-Spray-Girls/dp/B0DTB2N2D9?linkCode=ll2&tag=ghaniarts-20" target="_blank" class="shop-btn">Buy on Amazon →</a>
+        </div>
+      </div>
+      <div class="shop-card" data-cat="art">
+        <div class="shop-img"><img src="https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B086JQQHPK&Format=_SL250_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=ghaniarts-20" alt="Art Set"/></div>
+        <div class="shop-info">
+          <span class="shop-cat">Art</span>
+          <div class="shop-name">Art Supplies Set</div>
+          <p class="shop-desc">Everything you need to unleash your creativity. A must-have for every artist.</p>
+          <a href="https://www.amazon.com/dp/B086JQQHPK?linkCode=ll2&tag=ghaniarts-20" target="_blank" class="shop-btn">Buy on Amazon →</a>
+        </div>
+      </div>
+      <div class="shop-card" data-cat="art">
+        <div class="shop-img"><img src="https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0D22JZVCJ&Format=_SL250_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=ghaniarts-20" alt="Art Tool"/></div>
+        <div class="shop-info">
+          <span class="shop-cat">Art</span>
+          <div class="shop-name">Creative Art Tool</div>
+          <p class="shop-desc">Elevate your artistic journey with this premium tool for all skill levels.</p>
+          <a href="https://www.amazon.com/dp/B0D22JZVCJ?linkCode=ll2&tag=ghaniarts-20" target="_blank" class="shop-btn">Buy on Amazon →</a>
+        </div>
+      </div>
+      <div class="shop-card" data-cat="beauty">
+        <div class="shop-img"><img src="https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0D8TPVQBR&Format=_SL250_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=ghaniarts-20" alt="Dove Lotion"/></div>
+        <div class="shop-info">
+          <span class="shop-cat">Beauty</span>
+          <div class="shop-name">Dove Niacinamide Body Lotion</div>
+          <p class="shop-desc">Multipurpose moisturizing lotion for soft, glowing skin every day.</p>
+          <a href="https://www.amazon.com/Dove-Multipurpose-Elasticity-Niacinamide-Moisturizing/dp/B0D8TPVQBR?linkCode=ll2&tag=ghaniarts-20" target="_blank" class="shop-btn">Buy on Amazon →</a>
+        </div>
+      </div>
+      <div class="shop-card" data-cat="fashion">
+        <div class="shop-img"><img src="https://ws-na.amazon-adsystem.com/widgets/q?_encoding=UTF8&ASIN=B0F379FCV9&Format=_SL250_&ID=AsinImage&MarketPlace=US&ServiceVersion=20070822&WS=1&tag=ghaniarts-20" alt="T-Shirt"/></div>
+        <div class="shop-info">
+          <span class="shop-cat">Fashion</span>
+          <div class="shop-name">SOLY HUX Graphic Oversized T-Shirt</div>
+          <p class="shop-desc">Trendy aesthetic streetwear graphic tee. Comfortable oversized fit.</p>
+          <a href="https://www.amazon.com/SOLY-HUX-Graphic-Aesthetic-Streetwear/dp/B0F379FCV9?linkCode=ll2&tag=ghaniarts-20" target="_blank" class="shop-btn">Buy on Amazon →</a>
+        </div>
+      </div>
+    </div>
+    <p class="shop-disclaimer">* As an Amazon Associate, Ghani earns from qualifying purchases.</p>
+  </section>
   <section class="contact-section" id="contact">
     <div class="contact-bg"></div>
     <p class="section-label" style="color:var(--gold);">Get in Touch</p>
     <h2 class="contact-title">Let's Create<br><span>Together</span></h2>
     <p class="contact-sub">Whether you're looking to collect, commission, or collaborate — we'd love to hear from you.</p>
-    <a href="mailto:hello@ghani.art" class="contact-email">hello@ghani.art</a>
-    <div class="contact-actions"><a href="mailto:hello@ghani.art" class="btn-primary">Send a Message</a></div>
+    <a href="tel:7483967306" class="contact-email">+91 7483967306</a>
+    <div class="contact-actions">
+      <a href="https://wa.me/917483967306" target="_blank" class="btn-primary">WhatsApp Us</a>
+    </div>
   </section>
   <footer>
     <div class="footer-logo">Ghani</div>
     <p class="footer-copy">© 2024 Ghani Art. All rights reserved.</p>
-    <div class="footer-social"><a href="#">Instagram</a><a href="#">Pinterest</a><a href="#">Behance</a></div>
+    <div class="footer-social">
+      <a href="https://instagram.com/ganeshks7483" target="_blank">Instagram</a>
+      <a href="tel:7483967306">📞 Call</a>
+      <a href="https://wa.me/917483967306" target="_blank">WhatsApp</a>
+    </div>
   </footer>
   <script>
+    function filterShop(e, cat) {
+      document.querySelectorAll('.shop-card').forEach(card => {
+        card.classList.toggle('hidden', cat !== 'all' && card.dataset.cat !== cat);
+      });
+      document.querySelectorAll('.shop-tab').forEach(tab => tab.classList.remove('active'));
+      e.target.classList.add('active');
+    }
     const cursor = document.getElementById('cursor');
     const ring = document.getElementById('cursorRing');
     let mx=0,my=0,rx=0,ry=0;
@@ -232,7 +332,7 @@
         if(e.isIntersecting){e.target.style.opacity='1';e.target.style.transform='translateY(0)';}
       });
     },{threshold:0.1});
-    document.querySelectorAll('.gallery-item,.service-card').forEach(el=>{
+    document.querySelectorAll('.gallery-item,.service-card,.shop-card').forEach(el=>{
       el.style.opacity='0'; el.style.transform='translateY(30px)';
       el.style.transition='opacity 0.7s ease,transform 0.7s ease';
       observer.observe(el);
